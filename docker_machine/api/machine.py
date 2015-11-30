@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
 import re
+from .. import errors
 
 class MachineApiMixin(object):
     def machines(self, quiet=False, all=False, trunc=False, latest=False,
@@ -39,18 +40,22 @@ class MachineApiMixin(object):
     def create_machine(self, name, driver_config=None):
         command = ['docker-machine', 'create']
 
-        if driver_config is None:
-            command.extend(['--driver', 'none'])
-        else:
-            for key, value in driver_config.iteritems():
-                command.extend([key, value])
+        # if driver_config is None:
+        #     command.extend(['--driver', 'none'])
+        # else:
+        #     for key, value in driver_config.iteritems():
+        #         command.extend([key, value])
+
+        # TODO: make args a list
+        command.extend(driver_config.args())
 
         command.append(name)
 
         output = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         out, err = output.communicate()
-        return err
-
+        if err is not None:
+            raise errors.DockerMachineException(err)
+        return out
 
     def remove_machine(self, name, force=False):
         command = ['docker-machine', 'rm']

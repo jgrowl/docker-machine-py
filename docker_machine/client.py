@@ -24,7 +24,7 @@
 #
 from . import api
 from . import constants
-# from . import errors
+from . import errors
 # from .auth import auth
 # from .unixconn import unixconn
 # from .ssladapter import ssladapter
