@@ -9,25 +9,19 @@ class DriverConfig(object):
         no_none_values = {k: v for k, v in arg_dictionary.items() if v is not None}
         return [item for k in no_none_values for item in (k, no_none_values[k])]
 
-    # @staticmethod
     def _format_key(self, arg):
         return '--{}-{}'.format(self.driver, arg.replace("_", "-"))
 
-    # @staticmethod
     def _format_val(self, arg):
         if (isinstance(arg, bool)):
             return 'true' if arg else 'false'
         return arg
 
-    # @staticmethod
     def _lookup_arg(self, arg, env_var=None, default=None):
         if arg is not None:
             return arg
 
         return default if env_var is None else os.environ.get(env_var, default)
-
-
-# self. = self._lookup_arg(, '', '')
 
 
 class Amazonec2DriverConfig(DriverConfig):
@@ -136,10 +130,184 @@ class GoogleDriverConfig(DriverConfig):
         self.tags = self._lookup_arg(tags, 'GOOGLE_TAGS')
         self.use_internal_ip = self._lookup_arg(use_internal_ip, 'GOOGLE_USE_INTERNAL_IP')
 
-# class DigitaloceanDriverConfig(DriverConfig):
-#     def __init__(self):
-#         super(DigitaloceanDriverConfig, self).__init__('exoscale')
-#
-#         # Required
-#
-#         # Optional
+
+class GenericDriverConfig(DriverConfig):
+    def __init__(self, ip_address=None, ssh_user=None, ssh_key=None, ssh_port=None):
+        super(GenericDriverConfig, self).__init__('generic')
+
+        # Required
+        self.ip_address = ip_address
+
+        # Optional
+        self.ssh_user = ssh_user
+        self.ssh_key = ssh_key
+        self.ssh_port = ssh_port
+
+
+class HypervDriverConfig(DriverConfig):
+    def __init__(self, boot2docker_url=None, boot2docker_location=None, virtual_switch=None, disk_size=None,
+                 memory=None):
+        super(HypervDriverConfig, self).__init__('hyperv')
+
+        # Optional
+        self.boot2docker_url = boot2docker_url
+        self.boot2docker_location = boot2docker_location
+        self.virtual_switch = virtual_switch
+        self.disk_size = disk_size
+        self.memory = memory
+
+
+class OpenstackDriverConfig(DriverConfig):
+    def __init__(self, auth_url=None, flavor_name=None, flavor_id=None, image_name=None, image_id=None, insecure=None,
+                 domain_name=None, domain_id=None, username=None, password=None, tenant_name=None, tenant_id=None,
+                 region=None, availability_zone=None, endpoint_type=None, net_name=None, net_id=None, sec_groups=None,
+                 floatingip_pool=None, ip_version=None, ssh_user=None, ssh_port=None, active_timeout=None):
+        super(OpenstackDriverConfig, self).__init__('openstack')
+
+        # Optional
+        self.auth_url = auth_url
+        self.flavor_name = flavor_name
+        self.flavor_id = flavor_id
+        self.image_name = image_name
+        self.image_id = image_id
+        self.insecure = insecure
+        self.domain_name = domain_name
+        self.domain_id = domain_id
+        self.username = username
+        self.password = password
+        self.tenant_name = tenant_name
+        self.tenant_id = tenant_id
+        self.region	= region
+        self.availability_zone = availability_zone
+        self.endpoint_type = endpoint_type
+        self.net_name = net_name
+        self.net_id = net_id
+        self.sec_groups	= sec_groups
+        self.floatingip_pool = floatingip_pool
+        self.ip_version	= ip_version
+        self.ssh_user = ssh_user
+        self.ssh_port = ssh_port
+        self.active_timeout	= active_timeout
+
+
+class RackspaceDriverConfig(DriverConfig):
+    def __init__(self, username=None, api_key=None, region=None, endpoint_type=None, image_id=None, flavor_id=None,
+                 ssh_user=None, ssh_port=None,docker_install=None):
+        super(RackspaceDriverConfig, self).__init__('rackspace')
+
+        # Required
+        self.username = username
+        self.api_key = api_key
+        self.region = region
+
+        # Optional
+        self.endpoint_type = endpoint_type
+        self.image_id = image_id
+        self.flavor_id = flavor_id
+        self.ssh_user = ssh_user
+        self.ssh_port = ssh_port
+        self.docker_install = docker_install
+
+
+class SoftlayerDriverConfig(DriverConfig):
+    def __init__(self, user=None, api_key=None, domain=None, memory=None, disk_size=None, region=None, cpu=None,
+                 hostname=None, api_endpoint=None, hourly_billing=None, local_disk=None, private_net_only=None,
+                 image=None, public_vlan_id=None, private_vlan_id=None):
+        super(SoftlayerDriverConfig, self).__init__('softlayer')
+
+        # Required
+        self.user = user
+        self.api_key = api_key
+        self.domain = domain
+
+        # Optional
+        self.memory = memory
+        self.disk_size = disk_size
+        self.region = region
+        self.cpu = cpu
+        self.hostname = hostname
+        self.api_endpoint = api_endpoint
+        self.hourly_billing = hourly_billing
+        self.local_disk = local_disk
+        self.private_net_only = private_net_only
+        self.image = image
+        self.public_vlan_id = public_vlan_id
+        self.private_vlan_id = private_vlan_id
+
+
+
+class VirtualboxDriverConfig(DriverConfig):
+    def __init__(self, memory=None, cpu_count=None, disk_size=None, boot2docker_url=None, import_boot2docker_vm=None,
+                 hostonly_cidr=None, hostonly_nictype=None, hostonly_nicpromisc=None, no_share=None):
+        super(VirtualboxDriverConfig, self).__init__('virtualbox')
+
+        # Optional
+        self.memory = memory
+        self.cpu_count = cpu_count
+        self.disk_size = disk_size
+        self.boot2docker_url = boot2docker_url
+        self.import_boot2docker_vm = import_boot2docker_vm
+        self.hostonly_cidr = hostonly_cidr
+        self.hostonly_nictype = hostonly_nictype
+        self.hostonly_nicpromisc = hostonly_nicpromisc
+        self.no_share = no_share
+
+
+class VmwarevcloudairDriverConfig(DriverConfig):
+    def __init__(self, username=None, password=None, computeid=None, vdcid=None, orgvdcnetwork=None, edgegateway=None,
+                 publicip=None, catalog=None, catalogitem=None, provision=None, cpu_count=None, memory_size=None,
+                 ssh_port=None, docker_port=None):
+        super(VmwarevcloudairDriverConfig, self).__init__('vmwarevcloudair')
+
+        # Required
+        self.username = username
+        self.password = password
+
+        # Optional
+        self.computeid = computeid
+        self.vdcid = vdcid
+        self.orgvdcnetwork = orgvdcnetwork
+        self.edgegateway = edgegateway
+        self.publicip = publicip
+        self.catalog = catalog
+        self.catalogitem = catalogitem
+        self.provision = provision
+        self.cpu_count = cpu_count
+        self.memory_size = memory_size
+        self.ssh_port = ssh_port
+        self.docker_port = docker_port
+
+
+class VmwarefusionDriverConfig(DriverConfig):
+    def __init__(self, boot2docker_url=None, cpu_count=None, disk_size=None, memory_size=None):
+
+        super(VmwarefusionDriverConfig, self).__init__('vmwarefusion')
+
+        # Optional
+        self.boot2docker_url = boot2docker_url
+        self.cpu_count = cpu_count
+        self.disk_size = disk_size
+        self.memory_size = memory_size
+
+
+class VmwarevsphereDriverConfig(DriverConfig):
+    def __init__(self, username=None, password=None, cpu_count=None, memory_size=None, disk_size=None,
+                 boot2docker_url=None, vcenter=None, network=None, datastore=None, datacenter=None, pool=None,
+                 compute_ip=None):
+        super(VmwarevsphereDriverConfig, self).__init__('vmwarevsphere')
+
+        # Required
+        self.username = username
+        self.password = password
+
+        # Optional
+        self.cpu_count = cpu_count
+        self.memory_size = memory_size
+        self.disk_size = disk_size
+        self.boot2docker_url = boot2docker_url
+        self.vcenter = vcenter
+        self.network = network
+        self.datastore = datastore
+        self.datacenter = datacenter
+        self.pool = pool
+        self.compute_ip = compute_ip
