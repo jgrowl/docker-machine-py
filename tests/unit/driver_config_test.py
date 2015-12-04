@@ -6,8 +6,15 @@ from docker_machine.api.driver_config import (
     DigitaloceanDriverConfig
 )
 
+from docker_machine.errors import (
+    MissingRequiredArgument
+)
+
 
 class DriverContainerTest(DockerClientTest):
+
+    def test_digitalocean_driver_config_requires_access_token(self):
+        self.assertRaises(MissingRequiredArgument, DigitaloceanDriverConfig)
 
     def test_digitalocean_driver_config(self):
         access_token = 'test_access_token'

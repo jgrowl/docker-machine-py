@@ -1,8 +1,11 @@
 import os
+from .. import errors
+
 
 class DriverConfig(object):
-    def __init__(self, driver):
+    def __init__(self, driver, required_args=[]):
         self.driver = driver
+        self._require(required_args)
 
     def args(self):
         arg_dictionary = dict(map(lambda (k,v): (self._format_key(k), self._format_val(v)), vars(self).iteritems()))
@@ -23,52 +26,60 @@ class DriverConfig(object):
 
         return default if env_var is None else os.environ.get(env_var, default)
 
+    def _require(self, pairs):
+        for pair in pairs:
+            if self._lookup_arg(pair[0], pair[1]) is None:
+                raise errors.MissingRequiredArgument
+
 
 class Amazonec2DriverConfig(DriverConfig):
     def __init__(self, access_key=None, secret_key=None, vpc_id=None, session_token=None, ami=None, region=None,
                  zone=None, subnet_id=None, security_group=None, instance_type=None, root_size=None,
                  iam_instance_profile=None, ssh_user=None, request_spot_instance=None, spot_price=None,
                  private_address_only=None, monitoring=None):
-        super(Amazonec2DriverConfig, self).__init__('amazonec2')
+        super(Amazonec2DriverConfig, self).__init__('amazonec2', [(access_key, 'AWS_ACCESS_KEY_ID'),
+                                                                  (secret_key, 'AWS_SECRET_ACCESS_KEY'),
+                                                                  (vpc_id, 'AWS_VPC_ID')])
 
         # Required
-        self.access_key = self._lookup_arg(access_key, 'AWS_ACCESS_KEY_ID')
-        self.secret_key = self._lookup_arg(secret_key, 'AWS_SECRET_ACCESS_KEY')
-        self.vpc_id = self._lookup_arg(vpc_id, 'AWS_VPC_ID')
+        self.access_key = access_key
+        self.secret_key = secret_key
+        self.vpc_id = vpc_id
 
         # Optional
-        self.session_token = self._lookup_arg(session_token, 'AWS_SESSION_TOKEN')
-        self.ami = self._lookup_arg(ami, 'AWS_AMI')
-        self.region = self._lookup_arg(region, 'AWS_DEFAULT_REGION')
-        self.zone = self._lookup_arg(zone, 'AWS_ZONE')
-        self.subnet_id = self._lookup_arg(subnet_id, 'AWS_SUBNET_ID')
-        self.security_group = self._lookup_arg(security_group, 'AWS_SECURITY_GROUP')
-        self.instance_type = self._lookup_arg(instance_type, 'AWS_INSTANCE_TYPE')
-        self.root_size = self._lookup_arg(root_size, 'AWS_ROOT_SIZE')
-        self.iam_instance_profile = self._lookup_arg(iam_instance_profile, 'AWS_INSTANCE_PROFILE')
-        self.ssh_user = self._lookup_arg(ssh_user, 'AWS_SSH_USER')
-        self.request_spot_instance = self._lookup_arg(request_spot_instance, None)
-        self.spot_price = self._lookup_arg(spot_price, None)
-        self.private_address_only = self._lookup_arg(private_address_only, None)
-        self.monitoring = self._lookup_arg(monitoring, None)
+        self.session_token = session_token
+        self.ami = ami
+        self.region = region
+        self.zone = zone
+        self.subnet_id = subnet_id
+        self.security_group = security_group
+        self.instance_type = instance_type
+        self.root_size = root_size
+        self.iam_instance_profile = iam_instance_profile
+        self.ssh_user = ssh_user
+        self.request_spot_instance = request_spot_instance
+        self.spot_price = spot_price
+        self.private_address_only = private_address_only
+        self.monitoring = monitoring
 
 
 class AzureDriverConfig(DriverConfig):
     def __init__(self, subscription_id=None, subscription_cert=None, docker_port=None, image=None, location=None,
                  password=None, publish_settings_file=None, size=None, ssh_port=None, username=None):
-        super(AzureDriverConfig, self).__init__('azure')
+        super(AzureDriverConfig, self).__init__('azure', [(subscription_id, 'AZURE_SUBSCRIPTION_ID'),
+                                                          (subscription_cert, 'AZURE_SUBSCRIPTION_CERT')])
 
         # Required
-        self.subscription_id = self._lookup_arg(subscription_id, 'AZURE_SUBSCRIPTION_ID')
-        self.subscription_cert = self._lookup_arg(subscription_cert, 'AZURE_SUBSCRIPTION_CERT')
+        self.subscription_id = subscription_id
+        self.subscription_cert = subscription_cert
 
         # Optional
-        self.docker_port = self._lookup_arg(docker_port, None)
-        self.image = self._lookup_arg(image, 'AZURE_LOCATION')
-        self.location = self._lookup_arg(location, 'AZURE_LOCATION')
-        self.password = self._lookup_arg(password, None)
-        self.publish_settings_file = self._lookup_arg(publish_settings_file, 'AZURE_PUBLISH_SETTINGS_FILE')
-        self.size = self._lookup_arg(size, 'AZURE_SIZE')
+        self.docker_port = docker_port
+        self.image = image
+        self.location = location
+        self.password = password
+        self.publish_settings_file = publish_settings_file
+        self.size = size
         self.ssh_port = ssh_port
         self.username = username
 
@@ -76,64 +87,64 @@ class AzureDriverConfig(DriverConfig):
 class DigitaloceanDriverConfig(DriverConfig):
     def __init__(self, access_token=None, image=None, region=None, ipv6=None, private_networking=None, size=None,
                  backups=None):
-        super(DigitaloceanDriverConfig, self).__init__('digitalocean')
+        super(DigitaloceanDriverConfig, self).__init__('digitalocean', [(access_token, 'DIGITALOCEAN_ACCESS_TOKEN')])
 
         # Required
-        self.access_token = self._lookup_arg(access_token, 'DIGITALOCEAN_ACCESS_TOKEN')
+        self.access_token = access_token
 
         # Optional
-        self.image = self._lookup_arg(image, 'DIGITALOCEAN_IMAGE')
-        self.ipv6 = self._lookup_arg(ipv6, 'DIGITALOCEAN_IPV6')
-        self.region = self._lookup_arg(region, 'DIGITALOCEAN_REGION')
-        self.private_networking = self._lookup_arg(private_networking, 'DIGITALOCEAN_PRIVATE_NETWORKING')
-        self.size = self._lookup_arg(size, 'DIGITALOCEAN_SIZE')
-        self.backups = self._lookup_arg(backups, 'DIGITALOCEAN_BACKUPS')
+        self.image = image
+        self.ipv6 = ipv6
+        self.region = region
+        self.private_networking = private_networking
+        self.size = size
+        self.backups = backups
 
 
 class ExoscaleDriverConfig(DriverConfig):
     def __init__(self, api_key=None, api_secret_key=None, url=None, instance_profile=None, disk_size=None, image=None,
                  security_group=None, availability_zone=None):
-        super(ExoscaleDriverConfig, self).__init__('exoscale')
+        super(ExoscaleDriverConfig, self).__init__('exoscale', [(api_key, 'EXOSCALE_API_KEY'),
+                                                                (api_secret_key, 'EXOSCALE_API_SECRET')])
 
         # Required
-        self.api_key = self._lookup_arg(api_key, 'EXOSCALE_API_KEY')
-        self.api_secret_key = self._lookup_arg(api_secret_key, 'EXOSCALE_API_SECRET')
+        self.api_key = api_key
+        self.api_secret_key = api_secret_key
 
         # Optional
-        self.url = self._lookup_arg(url, 'EXOSCALE_ENDPOINT')
-        self.instance_profile = self._lookup_arg(instance_profile, 'EXOSCALE_INSTANCE_PROFILE')
-        self.disk_size = self._lookup_arg(disk_size, 'EXOSCALE_DISK_SIZE')
-        self.image = self._lookup_arg(image, 'EXOSCALE_IMAGE')
-        self.security_group = self._lookup_arg(security_group, 'EXOSCALE_SECURITY_GROUP')
-        self.availability_zone = self._lookup_arg(availability_zone, 'EXOSCALE_AVAILABILITY_ZONE')
+        self.url = url
+        self.instance_profile = instance_profile
+        self.disk_size = disk_size
+        self.image = image
+        self.security_group = security_group
+        self.availability_zone = availability_zone
 
 
 class GoogleDriverConfig(DriverConfig):
     def __init__(self, project=None, zone=None, machine_type=None, machine_image=None, username=None, scopes=None,
                  disk_size=None, disk_type=None, address=None, preemptible=None, tags=None, use_internal_ip=None):
-        super(GoogleDriverConfig, self).__init__('google')
+        super(GoogleDriverConfig, self).__init__('google', [(project, 'GOOGLE_PROJECT')])
 
         # Required
-        self.project = self._lookup_arg(project, 'GOOGLE_PROJECT')
+        self.project = project
 
         # Optional
-        self.zone = self._lookup_arg(zone, 'GOOGLE_ZONE')
-        self.machine_type = self._lookup_arg(machine_type, 'GOOGLE_MACHINE_TYPE')
-        self.machine_image = self._lookup_arg(machine_image, 'GOOGLE_MACHINE_IMAGE')
-        self.username = self._lookup_arg(username, 'GOOGLE_USERNAME')
-        self.username = self._lookup_arg(zone, 'GOOGLE_USERNAME')
-        self.scopes = self._lookup_arg(scopes, 'GOOGLE_SCOPES')
-        self.disk_size = self._lookup_arg(disk_size, 'GOOGLE_DISK_SIZE')
-        self.disk_type = self._lookup_arg(disk_type, 'GOOGLE_DISK_TYPE')
-        self.address = self._lookup_arg(address, 'GOOGLE_ADDRESS')
-        self.preemptible = self._lookup_arg(preemptible, 'GOOGLE_PREEMPTIBLE')
-        self.tags = self._lookup_arg(tags, 'GOOGLE_TAGS')
-        self.use_internal_ip = self._lookup_arg(use_internal_ip, 'GOOGLE_USE_INTERNAL_IP')
+        self.zone = zone
+        self.machine_type = machine_type
+        self.machine_image = machine_image
+        self.username = username
+        self.scopes = scopes
+        self.disk_size = disk_size
+        self.disk_type = disk_type
+        self.address = address
+        self.preemptible = preemptible
+        self.tags = tags
+        self.use_internal_ip = use_internal_ip
 
 
 class GenericDriverConfig(DriverConfig):
     def __init__(self, ip_address=None, ssh_user=None, ssh_key=None, ssh_port=None):
-        super(GenericDriverConfig, self).__init__('generic')
+        super(GenericDriverConfig, self).__init__('generic', [(ip_address, None)])
 
         # Required
         self.ip_address = ip_address
@@ -193,7 +204,8 @@ class OpenstackDriverConfig(DriverConfig):
 class RackspaceDriverConfig(DriverConfig):
     def __init__(self, username=None, api_key=None, region=None, endpoint_type=None, image_id=None, flavor_id=None,
                  ssh_user=None, ssh_port=None,docker_install=None):
-        super(RackspaceDriverConfig, self).__init__('rackspace')
+        super(RackspaceDriverConfig, self).__init__('rackspace', [(username, 'OS_USERNAME'), (api_key, 'OS_API_KEY'),
+                                                                  (region, 'OS_REGION_NAME')])
 
         # Required
         self.username = username
@@ -213,7 +225,9 @@ class SoftlayerDriverConfig(DriverConfig):
     def __init__(self, user=None, api_key=None, domain=None, memory=None, disk_size=None, region=None, cpu=None,
                  hostname=None, api_endpoint=None, hourly_billing=None, local_disk=None, private_net_only=None,
                  image=None, public_vlan_id=None, private_vlan_id=None):
-        super(SoftlayerDriverConfig, self).__init__('softlayer')
+        super(SoftlayerDriverConfig, self).__init__('softlayer', [(user, 'SOFTLAYER_USER'),
+                                                                  (api_key, 'SOFTLAYER_API_KEY'),
+                                                                  (domain, 'SOFTLAYER_DOMAIN')])
 
         # Required
         self.user = user
@@ -257,7 +271,8 @@ class VmwarevcloudairDriverConfig(DriverConfig):
     def __init__(self, username=None, password=None, computeid=None, vdcid=None, orgvdcnetwork=None, edgegateway=None,
                  publicip=None, catalog=None, catalogitem=None, provision=None, cpu_count=None, memory_size=None,
                  ssh_port=None, docker_port=None):
-        super(VmwarevcloudairDriverConfig, self).__init__('vmwarevcloudair')
+        super(VmwarevcloudairDriverConfig, self).__init__('vmwarevcloudair', [(username, 'VCLOUDAIR_USERNAME'),
+                                                                              (password, 'VCLOUDAIR_PASSWORD')])
 
         # Required
         self.username = username
@@ -294,7 +309,8 @@ class VmwarevsphereDriverConfig(DriverConfig):
     def __init__(self, username=None, password=None, cpu_count=None, memory_size=None, disk_size=None,
                  boot2docker_url=None, vcenter=None, network=None, datastore=None, datacenter=None, pool=None,
                  compute_ip=None):
-        super(VmwarevsphereDriverConfig, self).__init__('vmwarevsphere')
+        super(VmwarevsphereDriverConfig, self).__init__('vmwarevsphere', [(username, 'VSPHERE_USERNAME'),
+                                                                          (password, 'VSPHERE_PASSWORD')])
 
         # Required
         self.username = username
