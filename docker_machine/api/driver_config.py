@@ -56,7 +56,7 @@ class Amazonec2DriverConfig(DriverConfig):
 class AzureDriverConfig(DriverConfig):
     def __init__(self, subscription_id=None, subscription_cert=None, docker_port=None, image=None, location=None,
                  password=None, publish_settings_file=None, size=None, ssh_port=None, username=None):
-        super(Amazonec2DriverConfig, self).__init__('azure')
+        super(AzureDriverConfig, self).__init__('azure')
 
         # Required
         self.subscription_id = self._lookup_arg(subscription_id, 'AZURE_SUBSCRIPTION_ID')
@@ -111,7 +111,7 @@ class ExoscaleDriverConfig(DriverConfig):
 class GoogleDriverConfig(DriverConfig):
     def __init__(self, project=None, zone=None, machine_type=None, machine_image=None, username=None, scopes=None,
                  disk_size=None, disk_type=None, address=None, preemptible=None, tags=None, use_internal_ip=None):
-        super(DigitaloceanDriverConfig, self).__init__('google')
+        super(GoogleDriverConfig, self).__init__('google')
 
         # Required
         self.project = self._lookup_arg(project, 'GOOGLE_PROJECT')
