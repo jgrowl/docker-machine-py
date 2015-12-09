@@ -60,12 +60,7 @@ class MachineApiMixin(object):
 
     def machine_status(self, name):
         out = self.cmd(['docker-machine', 'status', name])
-
-        s = out.rstrip('\n').lower()
-        # if s not in ['running']:
-        #     return None
-
-        return s
+        return out.rstrip('\n').lower()
 
     def create_machine(self, name, driver_config=None):
         command = ['docker-machine', 'create']
