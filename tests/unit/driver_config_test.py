@@ -2,7 +2,7 @@ from .api_test import (
     DockerClientTest,
 )
 
-from docker_machine.api.driver_config import (
+from docker_machine.cli.driver_config import (
     DigitaloceanDriverConfig
 )
 

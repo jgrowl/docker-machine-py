@@ -4,11 +4,8 @@
 #
 # import requests
 # import requests.exceptions
-# import six
-# import websocket
-#
-#
-from . import api
+
+from . import cli
 from . import constants
 from . import errors
 # from .auth import auth
@@ -18,7 +15,7 @@ from .utils import utils
 # from .utils import utils, check_resource
 # from .tls import TLSConfig
 
-from api.driver_config import (
+from cli.driver_config import (
     DigitaloceanDriverConfig
 )
 
@@ -33,10 +30,9 @@ class Client(
     # api.ImageApiMixin,
     # api.VolumeApiMixin,
     # api.NetworkApiMixin
-    api.MachineApiMixin
+    cli.MachineApiMixin
     ):
-    def __init__(self, base_url=None, version=None,
-                 timeout=constants.DEFAULT_TIMEOUT_SECONDS, tls=False):
+    def __init__(self, base_url=None, version=None, timeout=constants.DEFAULT_TIMEOUT_SECONDS, tls=False):
         super(Client, self).__init__()
 
 

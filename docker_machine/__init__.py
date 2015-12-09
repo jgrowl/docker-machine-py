@@ -5,4 +5,4 @@ __title__ = 'docker-machine-py'
 
 from .client import Client #, AutoVersionClient # flake8: noqa
 
-from .api.driver_config import DigitaloceanDriverConfig
+from .cli.driver_config import DigitaloceanDriverConfig
