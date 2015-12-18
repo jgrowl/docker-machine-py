@@ -34,10 +34,10 @@ class DriverConfig(object):
 
         return default if env_var is None else os.environ.get(env_var, default)
 
-    def _require(self, pairs):
-        for pair in pairs:
-            if self._lookup_arg(pair[0], pair[1]) is None:
-                raise errors.MissingRequiredArgument
+    def _require(self, tuples):
+        for tuple in tuples:
+            if self._lookup_arg(tuple[1], tuple[2]) is None:
+                raise errors.MissingRequiredArgument(tuple[0])
 
 
 class NoneDriverConfig(DriverConfig):
@@ -54,9 +54,9 @@ class Amazonec2DriverConfig(DriverConfig):
                  zone=None, subnet_id=None, security_group=None, instance_type=None, root_size=None,
                  iam_instance_profile=None, ssh_user=None, request_spot_instance=None, spot_price=None,
                  private_address_only=None, monitoring=None):
-        super(Amazonec2DriverConfig, self).__init__('amazonec2', [(access_key, 'AWS_ACCESS_KEY_ID'),
-                                                                  (secret_key, 'AWS_SECRET_ACCESS_KEY'),
-                                                                  (vpc_id, 'AWS_VPC_ID')])
+        super(Amazonec2DriverConfig, self).__init__('amazonec2', [('access_key', access_key, 'AWS_ACCESS_KEY_ID'),
+                                                                  ('secret_key', secret_key, 'AWS_SECRET_ACCESS_KEY'),
+                                                                  ('vpc_id', vpc_id, 'AWS_VPC_ID')])
 
         # Required
         self.access_key = access_key
@@ -83,8 +83,8 @@ class Amazonec2DriverConfig(DriverConfig):
 class AzureDriverConfig(DriverConfig):
     def __init__(self, subscription_id=None, subscription_cert=None, docker_port=None, image=None, location=None,
                  password=None, publish_settings_file=None, size=None, ssh_port=None, username=None):
-        super(AzureDriverConfig, self).__init__('azure', [(subscription_id, 'AZURE_SUBSCRIPTION_ID'),
-                                                          (subscription_cert, 'AZURE_SUBSCRIPTION_CERT')])
+        super(AzureDriverConfig, self).__init__('azure', [('subscription_id', subscription_id, 'AZURE_SUBSCRIPTION_ID'),
+                                                          ('subscription_cert', subscription_cert, 'AZURE_SUBSCRIPTION_CERT')])
 
         # Required
         self.subscription_id = subscription_id
@@ -104,7 +104,7 @@ class AzureDriverConfig(DriverConfig):
 class DigitaloceanDriverConfig(DriverConfig):
     def __init__(self, access_token=None, image=None, region=None, ipv6=None, private_networking=None, size=None,
                  backups=None):
-        super(DigitaloceanDriverConfig, self).__init__('digitalocean', [(access_token, 'DIGITALOCEAN_ACCESS_TOKEN')])
+        super(DigitaloceanDriverConfig, self).__init__('digitalocean', [('access_token', access_token, 'DIGITALOCEAN_ACCESS_TOKEN')])
 
         # Required
         self.access_token = access_token
@@ -121,8 +121,8 @@ class DigitaloceanDriverConfig(DriverConfig):
 class ExoscaleDriverConfig(DriverConfig):
     def __init__(self, api_key=None, api_secret_key=None, url=None, instance_profile=None, disk_size=None, image=None,
                  security_group=None, availability_zone=None):
-        super(ExoscaleDriverConfig, self).__init__('exoscale', [(api_key, 'EXOSCALE_API_KEY'),
-                                                                (api_secret_key, 'EXOSCALE_API_SECRET')])
+        super(ExoscaleDriverConfig, self).__init__('exoscale', [('api_key', api_key, 'EXOSCALE_API_KEY'),
+                                                                ('api_secret_key', api_secret_key, 'EXOSCALE_API_SECRET')])
 
         # Required
         self.api_key = api_key
@@ -140,7 +140,7 @@ class ExoscaleDriverConfig(DriverConfig):
 class GoogleDriverConfig(DriverConfig):
     def __init__(self, project=None, zone=None, machine_type=None, machine_image=None, username=None, scopes=None,
                  disk_size=None, disk_type=None, address=None, preemptible=None, tags=None, use_internal_ip=None):
-        super(GoogleDriverConfig, self).__init__('google', [(project, 'GOOGLE_PROJECT')])
+        super(GoogleDriverConfig, self).__init__('google', [('project', project, 'GOOGLE_PROJECT')])
 
         # Required
         self.project = project
@@ -161,7 +161,7 @@ class GoogleDriverConfig(DriverConfig):
 
 class GenericDriverConfig(DriverConfig):
     def __init__(self, ip_address=None, ssh_user=None, ssh_key=None, ssh_port=None):
-        super(GenericDriverConfig, self).__init__('generic', [(ip_address, None)])
+        super(GenericDriverConfig, self).__init__('generic', [('ip_address', ip_address, None)])
 
         # Required
         self.ip_address = ip_address
@@ -221,8 +221,8 @@ class OpenstackDriverConfig(DriverConfig):
 class RackspaceDriverConfig(DriverConfig):
     def __init__(self, username=None, api_key=None, region=None, endpoint_type=None, image_id=None, flavor_id=None,
                  ssh_user=None, ssh_port=None,docker_install=None):
-        super(RackspaceDriverConfig, self).__init__('rackspace', [(username, 'OS_USERNAME'), (api_key, 'OS_API_KEY'),
-                                                                  (region, 'OS_REGION_NAME')])
+        super(RackspaceDriverConfig, self).__init__('rackspace', [('username', username, 'OS_USERNAME'), ('api_key', api_key, 'OS_API_KEY'),
+                                                                  ('region', region, 'OS_REGION_NAME')])
 
         # Required
         self.username = username
@@ -242,9 +242,9 @@ class SoftlayerDriverConfig(DriverConfig):
     def __init__(self, user=None, api_key=None, domain=None, memory=None, disk_size=None, region=None, cpu=None,
                  hostname=None, api_endpoint=None, hourly_billing=None, local_disk=None, private_net_only=None,
                  image=None, public_vlan_id=None, private_vlan_id=None):
-        super(SoftlayerDriverConfig, self).__init__('softlayer', [(user, 'SOFTLAYER_USER'),
-                                                                  (api_key, 'SOFTLAYER_API_KEY'),
-                                                                  (domain, 'SOFTLAYER_DOMAIN')])
+        super(SoftlayerDriverConfig, self).__init__('softlayer', [('user', user, 'SOFTLAYER_USER'),
+                                                                  ('api_key', api_key, 'SOFTLAYER_API_KEY'),
+                                                                  ('domain', domain, 'SOFTLAYER_DOMAIN')])
 
         # Required
         self.user = user
@@ -288,8 +288,8 @@ class VmwarevcloudairDriverConfig(DriverConfig):
     def __init__(self, username=None, password=None, computeid=None, vdcid=None, orgvdcnetwork=None, edgegateway=None,
                  publicip=None, catalog=None, catalogitem=None, provision=None, cpu_count=None, memory_size=None,
                  ssh_port=None, docker_port=None):
-        super(VmwarevcloudairDriverConfig, self).__init__('vmwarevcloudair', [(username, 'VCLOUDAIR_USERNAME'),
-                                                                              (password, 'VCLOUDAIR_PASSWORD')])
+        super(VmwarevcloudairDriverConfig, self).__init__('vmwarevcloudair', [('username', username, 'VCLOUDAIR_USERNAME'),
+                                                                              ('password', password, 'VCLOUDAIR_PASSWORD')])
 
         # Required
         self.username = username
@@ -326,8 +326,8 @@ class VmwarevsphereDriverConfig(DriverConfig):
     def __init__(self, username=None, password=None, cpu_count=None, memory_size=None, disk_size=None,
                  boot2docker_url=None, vcenter=None, network=None, datastore=None, datacenter=None, pool=None,
                  compute_ip=None):
-        super(VmwarevsphereDriverConfig, self).__init__('vmwarevsphere', [(username, 'VSPHERE_USERNAME'),
-                                                                          (password, 'VSPHERE_PASSWORD')])
+        super(VmwarevsphereDriverConfig, self).__init__('vmwarevsphere', [('username', username, 'VSPHERE_USERNAME'),
+                                                                          ('password', password, 'VSPHERE_PASSWORD')])
 
         # Required
         self.username = username
