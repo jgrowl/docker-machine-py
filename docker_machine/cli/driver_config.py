@@ -379,3 +379,8 @@ def create_config_from_dict(driver, dictionary):
         return VmwarevsphereDriverConfig(**dictionary)
 
     raise errors.UnknownDriverException
+
+
+def list_supported_drivers():
+    return ['amazonec2', 'azure', 'digitalocean', 'exoscale', 'google', 'generic', 'hyperv', 'openstack', 'rackspace',
+            'softlayer', 'virtualbox', 'vmwarevcloudair', 'vmwarefusion', 'vmwarevsphere']
