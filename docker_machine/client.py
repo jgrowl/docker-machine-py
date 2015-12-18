@@ -35,6 +35,10 @@ class Client(
     def __init__(self, base_url=None, version=None, timeout=constants.DEFAULT_TIMEOUT_SECONDS, tls=False):
         super(Client, self).__init__()
 
+        version_info = self.version_info()
+        self.version_number = version_info['version_number']
+        self.version_hash = version_info['version_hash']
+
 
         # if tls and not base_url.startswith('https://'):
         #     raise errors.TLSParameterError(

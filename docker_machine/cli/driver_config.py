@@ -7,12 +7,20 @@ class DriverConfig(object):
         self.driver = driver
         self._require(required_args)
 
+    def non_driver_keys(self):
+        return ['driver']
+
     def args(self):
-        arg_dictionary = dict(map(lambda (k,v): (self._format_key(k), self._format_val(v)), vars(self).iteritems()))
+        arg_dictionary = dict(map(lambda (k, v): (
+        self._format_key(k) if k in self.non_driver_keys() else self._format_driver_key(k), self._format_val(v)),
+                                  vars(self).iteritems()))
         no_none_values = {k: v for k, v in arg_dictionary.items() if v is not None}
         return [item for k in no_none_values for item in (k, no_none_values[k])]
 
     def _format_key(self, arg):
+        return '--{}'.format(arg.replace("_", "-"))
+
+    def _format_driver_key(self, arg):
         return '--{}-{}'.format(self.driver, arg.replace("_", "-"))
 
     def _format_val(self, arg):
@@ -30,6 +38,15 @@ class DriverConfig(object):
         for pair in pairs:
             if self._lookup_arg(pair[0], pair[1]) is None:
                 raise errors.MissingRequiredArgument
+
+
+class NoneDriverConfig(DriverConfig):
+    def __init__(self, url='localhost'):
+        super(NoneDriverConfig, self).__init__('none', [])
+        self.url = url
+
+    def non_driver_keys(self):
+        return super(NoneDriverConfig, self).non_driver_keys() + ['url']
 
 
 class Amazonec2DriverConfig(DriverConfig):
@@ -327,3 +344,38 @@ class VmwarevsphereDriverConfig(DriverConfig):
         self.datacenter = datacenter
         self.pool = pool
         self.compute_ip = compute_ip
+
+
+def create_config_from_dict(driver, dictionary):
+    if driver is None or driver.lower() == 'none' or driver.strip() == '':
+        return NoneDriverConfig(**dictionary)
+    elif driver == 'amazonec2':
+        return Amazonec2DriverConfig(**dictionary)
+    elif driver == 'azure':
+        return AzureDriverConfig(**dictionary)
+    elif driver == 'digitalocean':
+        return DigitaloceanDriverConfig(**dictionary)
+    elif driver == 'exoscale':
+        return ExoscaleDriverConfig(**dictionary)
+    elif driver == 'google':
+        return GoogleDriverConfig(**dictionary)
+    elif driver == 'generic':
+        return GenericDriverConfig(**dictionary)
+    elif driver == 'hyperv':
+        return HypervDriverConfig(**dictionary)
+    elif driver == 'openstack':
+        return OpenstackDriverConfig(**dictionary)
+    elif driver == 'rackspace':
+        return RackspaceDriverConfig(**dictionary)
+    elif driver == 'softlayer':
+        return SoftlayerDriverConfig(**dictionary)
+    elif driver == 'virtualbox':
+        return VirtualboxDriverConfig(**dictionary)
+    elif driver == 'vmwarevcloudair':
+        return VmwarevcloudairDriverConfig(**dictionary)
+    elif driver == 'vmwarefusion':
+        return VmwarefusionDriverConfig(**dictionary)
+    elif driver == 'vmwarevsphere':
+        return VmwarevsphereDriverConfig(**dictionary)
+
+    raise errors.UnknownDriverException

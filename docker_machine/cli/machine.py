@@ -31,16 +31,31 @@ class MachineApiMixin(object):
     @staticmethod
     def cmd(command):
         output = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        out, err = output.communicate()
+        out, error = output.communicate()
 
-        if err:
-            raise errors.DockerMachineException(err)
-        return out
+        if not error:
+            return out
+
+        # TODO: add machine_name to command args?
+        if error == 'Host "none" does not exist':
+            raise errors.DockerMachineException(error)
+
+        raise errors.DockerMachineException(error)
+
+    def version_info(self):
+        out = self.cmd(['docker-machine', '--version'])
+        parts = out.split()
+        version_number = parts[2]
+        version_hash = parts[3]
+        return dict(version_number=version_number, version_hash=version_hash)
 
     def machine_names(self):
         out = self.cmd(['docker-machine', 'ls', '-q'])
         machine_names = out.splitlines()
         return machine_names
+
+    def machine_name_exists(self, machine_name):
+        return machine_name in self.machine_names()
 
     def machine_inspect(self, machine_name):
         out = self.cmd(['docker-machine', 'inspect', machine_name])
