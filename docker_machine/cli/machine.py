@@ -36,11 +36,11 @@ class MachineApiMixin(object):
         if not error:
             return out
 
-        # TODO: add machine_name to command args?
-        if error == 'Host "none" does not exist':
-            raise errors.DockerMachineException(error)
+        # # TODO: add machine_name to command args?
+        # if error == 'Host "none" does not exist':
+        #     raise errors.DockerMachineException(error)
 
-        raise errors.DockerMachineException(error)
+        raise errors.DockerMachineException(error.strip())
 
     def version_info(self):
         out = self.cmd(['docker-machine', '--version'])
