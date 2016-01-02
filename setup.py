@@ -24,7 +24,7 @@ setup(
     description="Python client for Docker.",
     url='https://github.com/jgrowl/docker-machine-py/',
     packages=[
-        'docker_machine', 'docker_machine.api',
+        'docker_machine', 'docker_machine.cli',
         # 'docker.auth', 'docker.unixconn',
         # 'docker.utils', 'docker.utils.ports', 'docker.ssladapter'
     ],
