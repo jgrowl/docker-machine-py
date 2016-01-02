@@ -1,5 +1,5 @@
 FROM python:2.7
-MAINTAINER Joffrey F <jonrowlands83@gmail.com>
+MAINTAINER Jonathan Rowlands <jonrowlands83@gmail.com>
 
 RUN apt-get update -y && apt-get install -y unzip \
     && apt-get clean \
