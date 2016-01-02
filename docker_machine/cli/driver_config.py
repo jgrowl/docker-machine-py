@@ -11,11 +11,14 @@ class DriverConfig(object):
         return ['driver']
 
     def args(self):
-        arg_dictionary = dict(map(lambda (k, v): (
-        self._format_key(k) if k in self.non_driver_keys() else self._format_driver_key(k), self._format_val(v)),
-                                  vars(self).iteritems()))
+        arg_dictionary = {}
+        for k, v in vars(self).iteritems():
+            key = self._format_key(k) if k in self.non_driver_keys() else self._format_driver_key(k)
+            value = self._format_val(v)
+            arg_dictionary[key] = value
+
         no_none_values = {k: v for k, v in arg_dictionary.items() if v is not None}
-        return [item for k in no_none_values for item in (k, no_none_values[k])]
+        return ["{}={}".format(k, v) for k, v in no_none_values.iteritems()]
 
     def _format_key(self, arg):
         return '--{}'.format(arg.replace("_", "-"))
