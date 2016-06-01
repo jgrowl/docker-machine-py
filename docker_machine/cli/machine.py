@@ -10,12 +10,6 @@ class Machine(object):
         self.machine_status = machine_status
         self.inspection = inspection
         self.env = env
-        # self.name
-        # self.config_version
-        # self.driver_name
-        # self.driver
-        # self.host_options
-        # self.raw_driver
 
     def __getattr__(self, name):
         try:
