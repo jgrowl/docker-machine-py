@@ -106,7 +106,7 @@ class AzureDriverConfig(DriverConfig):
 
 class DigitaloceanDriverConfig(DriverConfig):
     def __init__(self, access_token=None, image=None, region=None, ipv6=None, private_networking=None, size=None,
-                 backups=None):
+                 backups=None, userdata=None):
         super(DigitaloceanDriverConfig, self).__init__('digitalocean', [('access_token', access_token, 'DIGITALOCEAN_ACCESS_TOKEN')])
 
         # Required
@@ -119,6 +119,7 @@ class DigitaloceanDriverConfig(DriverConfig):
         self.private_networking = private_networking
         self.size = size
         self.backups = backups
+        self.userdata = userdata
 
 
 class ExoscaleDriverConfig(DriverConfig):
