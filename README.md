@@ -23,10 +23,9 @@ skeleton.
     client = docker_machine.Client()
     driver_config = create_config_from_dict('digital_ocean', driver_config_dict)
 
+    if not client.machine_name_exists(name):
+        client.create_machine(name, self.driver_config)
+        
     if client.machine_name_exists(name):
-        print 'Yay, it already exists!' 
-    else:
-        print 'It doesn't exist!'
+        client.remove_machine(name, force=True)
 
-    client.create_machine(name, self.driver_config)
-    client.remove_machine(name, force=True)
