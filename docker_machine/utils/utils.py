@@ -1,16 +1,3 @@
-# Copyright 2013 dotCloud inc.
-
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
-
-#        http://www.apache.org/licenses/LICENSE-2.0
-
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
 
 # import base64
 # import io
@@ -32,6 +19,22 @@
 # from .. import errors
 # from .. import tls
 # from .types import Ulimit, LogConfig
+import re
+
+
+def convert_camel_to_snake(name):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+
+def convert_keys_from_camel_to_snake(d):
+    new = {}
+    for k, v in d.iteritems():
+        if isinstance(v, dict):
+            v = convert_keys_from_camel_to_snake(v)
+        new[convert_camel_to_snake(k)] = v
+    return new
+
 
 
 # DEFAULT_HTTP_HOST = "127.0.0.1"
