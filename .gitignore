@@ -13,18 +13,19 @@
 .idea/shelf
 
 # Sensitive or high-churn files:
- .idea/dataSources.ids
- .idea/dataSources.xml
- .idea/sqlDataSources.xml
- .idea/dynamic.xml
- .idea/uiDesigner.xml
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+.idea/uiDesigner.xml
 
 # Gradle:
- .idea/gradle.xml
- .idea/libraries
+.idea/gradle.xml
+.idea/libraries
 
 # Mongo Explorer plugin:
- .idea/mongoSettings.xml
+.idea/mongoSettings.xml
 
 ## File-based project format:
 *.ipr

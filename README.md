@@ -1,31 +1,28 @@
 # docker-machine-py
-A simple python wrapper for docker-machine
 
-This is currently a really simple wrapper layer over the docker-machine command. We are simply making subprocess
-calls. There is no fancy daemon to interact with like in the docker-py project. docker-py was used as a project
-skeleton.
+A python wrapper for the docker-machine.
 
 ## Usage
 
-    name = 'my_digitalocean_machine'
-    
-    driver_config_dict = dict(
-        access_token='ACCESS_TOKEN'
-        image='ubuntu-15-10-x64'
-        region='nyc3'
-        size='512mb'
-        ipv6=False
-        private_networking=False
-        backups=False
-        userdata=None
-    )
-
-    client = docker_machine.Client()
-    driver_config = create_config_from_dict('digital_ocean', driver_config_dict)
-
-    if not client.machine_name_exists(name):
-        client.create_machine(name, self.driver_config)
+    import docker_machine
+    machine = Machine('my_digitalocean_machine')
+    if not machine.exists():
+        machine.create('digitalocean', access_token='my_digitalocean_access_token')
         
-    if client.machine_name_exists(name):
-        client.remove_machine(name, force=True)
-
+    status = machine.status()
+    machine.rm(force=True)
+    
+### Customizing the client
+    
+    docker_machine.CLIENT = docker_machine.cli.client.Client(storage_path=None, storage_path=None, tls_ca_cert=None, 
+        tls_ca_key=None, tls_client_cert=None, tls_client_key=None, github_api_token=None, native_ssh=False, 
+        bugsnag_api_token=None)
+    
+## Using the lower level wrapper 
+    
+If you need more control or wish to interact with docker-machine exactly as you would from cli you can use the client
+directly.
+    
+    import docker_machine
+    client = Client()
+    

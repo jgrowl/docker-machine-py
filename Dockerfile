@@ -5,7 +5,7 @@ RUN apt-get update -y && apt-get install -y unzip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -L https://github.com/docker/machine/releases/download/v0.5.3/docker-machine_linux-amd64 > /usr/local/bin/docker-machine && \
+RUN curl -L https://github.com/docker/machine/releases/download/v0.6.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine && \
     chmod +x /usr/local/bin/docker-machine
 
 RUN mkdir /home/docker-machine-py

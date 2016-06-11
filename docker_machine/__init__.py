@@ -1,8 +1,8 @@
-from .version import version#, version_info
+from .version import version
 
 __version__ = version
 __title__ = 'docker-machine-py'
 
-from .client import Client #, AutoVersionClient # flake8: noqa
-
-from .cli.driver_config import DigitaloceanDriverConfig
+from .cli.machine import Machine
+from .cli.client import Client, Status, Filter
+CLIENT = Client()
