@@ -18,7 +18,6 @@
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
 .idea/uiDesigner.xml
-.idea/uiDesigner.xml
 
 # Gradle:
 .idea/gradle.xml
@@ -49,4 +48,10 @@ crashlytics-build.properties
 fabric.properties
 
 tests/integration/__pycache__/
+
+build
+dist
+*.egg-info
+*.egg/
 *.pyc
+*.swp
