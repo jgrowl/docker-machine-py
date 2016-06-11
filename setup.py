@@ -6,7 +6,8 @@ ROOT_DIR = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(ROOT_DIR)
 
 requirements = [
-    'docker-py==1.6.0'
+    'docker-py==1.6.0',
+    'enum34'
 ]
 
 exec(open('docker_machine/version.py').read())
