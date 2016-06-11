@@ -11,3 +11,5 @@ services:
 before_install:
 - curl -L https://github.com/docker/machine/releases/download/v0.6.0/docker-machine-`uname -s`-`uname -m` | sudo tee --append /usr/local/bin/docker-machine > /dev/null
 - sudo chmod +x /usr/local/bin/docker-machine
+
+script: make test
