@@ -1,6 +1,15 @@
 # docker-machine-py
 
-A python wrapper for the docker-machine.
+[![Build Status](https://travis-ci.org/jgrowl/docker-machine-py.svg?branch=master)](https://travis-ci.org/jgrowl/docker-machine-py)
+
+A Python library for the Docker Machine CLI. It does everything the docker-machine command does, but from within Python 
+– create machines, check status, get ip, run ssh commands, regenerate certificates, etc.
+
+## Installation
+
+The latest stable version is always available on PyPi.
+
+    pip install docker-py
 
 ## Usage
 
