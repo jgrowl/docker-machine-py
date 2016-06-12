@@ -55,3 +55,7 @@ dist
 *.egg/
 *.pyc
 *.swp
+
+.tox
+.coverage
+html/*
