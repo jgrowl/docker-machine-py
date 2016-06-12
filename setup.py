@@ -10,13 +10,13 @@ requirements = [
     'enum34'
 ]
 
-exec(open('docker_machine/version.py').read())
+exec(open('docker/machine/version.py').read())
 
 with open('./test-requirements.txt') as test_reqs_txt:
     test_requirements = [line for line in test_reqs_txt]
 
 version = None
-exec(open('docker_machine/version.py').read())
+exec(open('docker/machine/version.py').read())
 
 setup(
     name="docker-machine-py",
@@ -24,7 +24,7 @@ setup(
     description="Python wrapper for Docker Machine.",
     url='https://github.com/jgrowl/docker-machine-py/',
     packages=[
-        'docker_machine', 'docker_machine.cli',
+        'docker.machine', 'docker.machine.cli',
     ],
     install_requires=requirements,
     tests_require=test_requirements,

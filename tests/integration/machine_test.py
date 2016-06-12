@@ -1,11 +1,10 @@
 import os
 import unittest
 
-from docker_machine.cli.machine import Machine
-from docker_machine.errors import DockerMachineException, MissingRequiredArgument
-from docker_machine.cli.client import Status
+from docker.machine.cli.machine import Machine
+from docker.machine.errors import DockerMachineException, MissingRequiredArgument
+from docker.machine.cli.client import Status
 
-os.environ["DOCKERMACHINEPY_DIGITALOCEAN_ACCESS_TOKEN"] = "BAD_TOKEN"
 digitalocean_access_token = os.environ.get('DOCKERMACHINEPY_DIGITALOCEAN_ACCESS_TOKEN')
 
 

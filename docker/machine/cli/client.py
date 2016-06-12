@@ -3,7 +3,7 @@ import json
 from enum import Enum
 from .tupperware import tupperware
 from .. import errors
-from docker_machine.cli.driver_config import DriverConfig
+from .driver_config import DriverConfig
 from .utils import convert_keys_from_camel_to_snake
 
 LOCALHOST = '127.0.0.1'

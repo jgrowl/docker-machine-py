@@ -1,7 +1,7 @@
 import unittest
 
-import docker_machine
-from docker_machine.errors import DockerMachineException
+import docker.machine
+from docker.machine.errors import DockerMachineException
 
 
 class BaseTestCases:
@@ -12,7 +12,7 @@ class BaseTestCases:
             self.machine_name = machine_name
             self.driver = driver
             self.driver_config = driver_config
-            self.client = docker_machine.Client()
+            self.client = docker.machine.Client()
 
         def setUp(self):
             self.client.create(self.machine_name, self.driver, **self.driver_config)

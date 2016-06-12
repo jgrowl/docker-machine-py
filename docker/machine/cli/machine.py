@@ -1,4 +1,4 @@
-import docker_machine
+import docker.machine
 import inspect
 
 
@@ -6,7 +6,7 @@ class Machine(object):
 
     @classmethod
     def client(cls):
-        return docker_machine.CLIENT
+        return docker.machine.CLIENT
 
     @classmethod
     def docker_machine_version(cls):
