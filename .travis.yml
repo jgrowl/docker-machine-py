@@ -1,18 +1,16 @@
 notifications:
   email: false
-
 sudo: required
-
 language: python
-
 services:
 - docker
-
-# command to install dependencies
-#install: pip install tox-travis
 install: pip install tox
-
-#script: make test
-
 script:
 - tox
+deploy:
+  provider: pypi
+  user: jgrowl
+  password:
+    secure: Uy6t5Bul33AjYzG9KLYRRe0kBmEuhZRSNpiGoomwp024fDKOlY5NZi0xVjn39rhCLV615PW5UnhyKFZGhU072vC9WY19HwM8QgulX2cyE94EquzQPxk05KWF8iyffEIQyDfRygU7q4+yVVnLxOgIfAexphBWy3Vtyxv06M58eyuKbQ1pzkAO8mj0ew9limsi9i8QahqJp0BI6iHA+4QStmHhadPN4DUszpPxpGq7zFGmGnEgYaqFdtF+IyfhBlbYfGKR4JR+E7UxGi1ZU/imRWs1eateClQRFNV9ziHEYKcTM7XCe2qyuJaJnK5BQNwmDNMqRhkRTD7nVUUejLJenh6RRbPM0D6+vHzQA5tAyIPwyuPDA3MXsyVLhYDVMe1JVzGPQrzY3Ayew33Z/TrtI6AyPjOooxX6zTrZfpl49zvqTcQOoLc7OpKdwdqDfdUThgNZ+l5+Sz//MSaBTSzKU9oRY2lhQLH29KR4QFwWIm23ICpP570DcOb1kJjmFtjX/W2jq8/I417EAoeZBs2Ohso0QKEiGLJU5exKMzJbTFro4jDJTRn8twL8iPU4Q2rD6esxaOyghex3a95Mp4uNp1N0pL9YM8kByRAL9gUduQSCrNOZEP5rQ5PbaNA/isqob35vuhRfx111pmlCQ+8zHZ5ozutZoeKFlp+szJ964Co=
+  on:
+    tags: true
