@@ -50,11 +50,6 @@ class Filter(object):
         return filters
 
     def __init__(self, key, value):
-        """
-        :param key:
-        :param value:
-        :return:
-        """
         self.key = key
         self.value = value
 
@@ -123,11 +118,6 @@ class Client(object):
         raise errors.DockerMachineException(error)
 
     def active(self):
-        """
-        Print which machine is active
-
-        :return:
-        """
         try:
             raw = self.cmd(['active'])
         except errors.DockerMachineException, e:
@@ -142,14 +132,6 @@ class Client(object):
         return ClientOutput(raw)
 
     def config(self, machine_name, swarm=False):
-        """
-        Print the connection config for machine
-
-        :param machine_name: A machine name.
-        :type machine_name: str or unicode
-        :param swarm: Display the Swarm config instead of the Docker daemon
-        :return:
-        """
         cmd = ['config']
         if swarm:
             cmd.append('--swarm')
@@ -158,14 +140,6 @@ class Client(object):
         return ClientOutput(raw)
 
     def create(self, machine_name, driver=None, **kwargs):
-        """
-        Create a machine
-
-        :param machine_name:
-        :param driver:
-        :param kwargs:
-        :return:
-        """
         driver_config = DriverConfig(driver, **kwargs)
         cmd = ['create']
         if driver_config.driver == 'none':
@@ -178,16 +152,6 @@ class Client(object):
         return ClientOutput(raw)
 
     def env(self, machine_name, swarm=False, shell=None, unset=False, no_proxy=False):
-        """
-        Display the commands to set up the environment for the Docker client
-
-        :param machine_name
-        :param swarm: Display the Swarm config instead of the Docker daemon
-        :param shell: Force environment to be configured for a specified shell: [fish, cmd, powershell], default is sh/bash
-        :param unset: Unset variables instead of setting them
-        :param no_proxy: Add machine IP to NO_PROXY environment variable
-        :return:
-        """
         cmd = ['env']
         if swarm:
             cmd.append('--swarm')
@@ -216,15 +180,6 @@ class Client(object):
         return ClientOutput(raw, ret)
 
     def inspect(self, machine_name, format=None, snake_case=False, named_tuple=False):
-        """
-        Inspect information about a machine
-
-        :param machine_name:
-        :param format: Format the output using the given go template.
-        :param snake_case Converts the dictionary keys to snake_case instead of leaving them CamelCase
-        :param named_tuple Converts the dictionary into nested namedtuples so you can use dot operator to access elements
-        :return:
-        """
         cmd = ['inspect', machine_name]
         if format is not None:
             cmd.append(format)
@@ -240,12 +195,6 @@ class Client(object):
         return ClientOutput(raw, out)
 
     def ip(self, *machine_names):
-        """
-        Get the IP address of a machine
-
-        :param machine_names: One or more machine names.
-        :return:
-        """
         cmd = ['ip']
         cmd.extend(machine_names)
         raw = self.cmd(cmd)
@@ -253,26 +202,12 @@ class Client(object):
         return ClientOutput(raw, formatted if formatted else '127.0.0.1')
 
     def kill(self, *machine_names):
-        """
-        Kill a machine
-
-        :param args:
-        :return:
-        """
         cmd = ['kill']
         cmd.extend(machine_names)
         raw = self.cmd(cmd)
         return ClientOutput(raw)
 
     def ls(self, quiet=False, filters=None, timeout=None):
-        """
-        List machines
-
-        :param quiet: Enable quiet mode
-        :param filters: Filter output based on conditions provided
-        :param timeout: Timeout in seconds, default to 10s
-        :return:
-        """
         cmd = ['ls']
 
         if quiet:
@@ -298,13 +233,6 @@ class Client(object):
         return raw
 
     def regenerate_certs(self, machine_name=None, force=True):
-        """
-        Regenerate TLS Certificates for a machine
-
-        :param machine_name:
-        :param force:
-        :return:
-        """
         cmd = ['regenerate-certs']
         if force:
             cmd.extend(['--force'])
@@ -316,24 +244,10 @@ class Client(object):
         return ClientOutput(raw)
 
     def restart(self, *machine_names):
-        """
-        Restart a machine
-
-        :param args:  Argument(s) are one or more machine names.
-        :return:
-        """
         raw = self.cmd(['restart'], *machine_names)
         return ClientOutput(raw)
 
     def rm(self, machine_name, force=False, prompt=False):
-        """
-        Remove a machine
-
-        :param machine_name
-        :param force:   Remove local configuration even if machine cannot be removed
-        :param prompt:  Prompting further user confirmation
-        :return:
-        """
         cmd = ['rm']
 
         # We never want a prompt
@@ -348,27 +262,12 @@ class Client(object):
         return ClientOutput(raw)
 
     def ssh(self, machine_name, command=None):
-        """
-        Log into or run a command on a machine with SSH.
-
-        :param machine_name:
-        :param command:
-        :return:
-        """
         if command is None:
             return self.cmd(['ssh'], machine_name)
 
         return self.cmd(['ssh'], machine_name, command)
 
     def scp(self, src, dest, recursive=False):
-        """
-        Copy files between machines
-
-        :param src:
-        :param dest:
-        :param recursive:
-        :return:
-        """
         cmd = ['scp']
         if recursive:
             cmd.extend(['--recursive'])
@@ -377,61 +276,26 @@ class Client(object):
         return self.cmd(cmd)
 
     def stop(self, *machine_names):
-        """
-        Stop a machine
-
-        :param args:
-        :return:
-        """
         raw = self.cmd(['stop'], *machine_names)
         return ClientOutput(raw)
 
     def start(self, *machine_names):
-        """
-        Start a machine
-
-        :param args:
-        :return:
-        """
         raw = self.cmd(['start'], *machine_names)
         return ClientOutput(raw)
 
     def status(self, machine_name):
-        """
-        Get the status of a machine
-
-        :param machine_name:
-        :return:
-        """
         raw = self.cmd(['status'], machine_name)
         return ClientOutput(raw, Status(raw.rstrip('\n')))
 
     def upgrade(self, *machine_names):
-        """
-        Upgrade a machine to the latest version of Docker
-
-        :param args:
-        :return:
-        """
         raw = self.cmd(['upgrade'], *machine_names)
         return ClientOutput(raw)
 
     def url(self, machine_name):
-        """
-        Get the URL of a machine
-
-        :param machine_name:
-        :return:
-        """
         raw = self.cmd(['url'], machine_name)
         return ClientOutput(raw, raw.rstrip('\n'))
 
     def version(self):
-        """
-        Show the Docker Machine version or a machine docker version
-
-        :return:
-        """
         raw = self.cmd(['version'])
         parts = raw.split()
         version_number = parts[2].replace(',', '')
@@ -442,12 +306,6 @@ class Client(object):
         return ClientOutput(raw, version_info)
 
     def help(self, command=None):
-        """
-        Shows a list of commands or help for one command
-
-        :param command
-        :return:
-        """
         cmd = ['help']
         if command is not None:
             cmd.append(command)
