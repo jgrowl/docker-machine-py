@@ -9,7 +9,7 @@ services:
 - docker
 
 # command to install dependencies
-install: True
+install: pip install tox-travis
 
 script: make test
 
