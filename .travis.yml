@@ -12,7 +12,7 @@ services:
 #install: pip install tox-travis
 install: pip install tox
 
-script: make test
+#script: make test
 
 script:
 - tox
