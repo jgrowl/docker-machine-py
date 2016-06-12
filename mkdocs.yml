@@ -1,0 +1,11 @@
+site_name: docker-machine-py Documentation
+site_description: An CLI client for Docker Machine written in Python
+#site_favicon: favicon_whale.png
+site_url: https://docker-machine-py.readthedocs.io
+repo_url: https://github.com/jgrowl/docker-machine-py/
+theme: readthedocs
+pages:
+- index.md
+- cli.md
+#  - 'Home': 'index.md'
+#  - 'Client CLI': 'cli.md'
