@@ -10,6 +10,12 @@ A Python library for the Docker Machine CLI. It does everything the docker-machi
 The latest stable version is always available on PyPi.
 
     pip install docker-py
+    
+## Documentation
+
+[![Documentation Status](https://readthedocs.org/projects/docker-machine-py/badge/?version=latest)](https://readthedocs.org/projects/docker-machine-py/?badge=latest)
+
+[Read the full documentation here.](http://docker-machine-py.readthedocs.org/en/latest/)
 
 ## Usage
 

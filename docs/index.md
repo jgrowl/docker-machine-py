@@ -10,10 +10,6 @@ Our latest stable is always available on PyPi.
 
 ## Documentation
 
-[![Documentation Status](https://readthedocs.org/projects/docker-machine-py/badge/?version=latest)](https://readthedocs.org/projects/docker-machine-py/?badge=latest)
-
-[Read the full documentation here.](http://docker-machine-py.readthedocs.org/en/latest/).
-
 Full documentation is available in the `/docs/` directory.
 
 ## License
