@@ -61,7 +61,7 @@ class Machine(object):
 
         try:
             return getattr(self.inspection, name)
-        except AttributeError, e:
+        except AttributeError:
             raise AttributeError("Machine object has no attribute '{}'".format(name))
 
     def __eq__(self, other):
