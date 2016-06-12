@@ -5,7 +5,5 @@ site_url: https://docker-machine-py.readthedocs.io
 repo_url: https://github.com/jgrowl/docker-machine-py/
 theme: readthedocs
 pages:
-#- index.md
-#- cli.md
 - Home: index.md
 - Client CLI: cli.md
