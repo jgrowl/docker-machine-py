@@ -67,27 +67,30 @@ class DriverConfig(object):
         no_none_values = {k: v for k, v in arg_dictionary.items() if v is not None}
         return ["{}={}".format(k, v) for k, v in no_none_values.iteritems()]
 
-    def _format_key(self, arg):
+    @staticmethod
+    def _format_key(arg):
         return '--{}'.format(arg.replace("_", "-"))
 
     def _format_driver_key(self, arg):
         return '--{}-{}'.format(self.driver, arg.replace("_", "-"))
 
-    def _format_val(self, arg):
-        if (isinstance(arg, bool)):
+    @staticmethod
+    def _format_val(arg):
+        if isinstance(arg, bool):
             return 'true' if arg else 'false'
         return arg
 
-    def _lookup_arg(self, arg, env_var=None, default=None):
+    @staticmethod
+    def _lookup_arg(arg, env_var=None, default=None):
         if arg is not None:
             return arg
 
         return default if env_var is None else os.environ.get(env_var, default)
 
     def _require(self, tuples):
-        for tuple in tuples:
-            if self._lookup_arg(tuple[1], tuple[2]) is None:
-                raise errors.MissingRequiredArgument(tuple[0])
+        for t in tuples:
+            if self._lookup_arg(t[1], t[2]) is None:
+                raise errors.MissingRequiredArgument(t[0])
 
 
 def list_supported_drivers():
