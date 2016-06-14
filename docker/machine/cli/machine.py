@@ -79,11 +79,10 @@ class Machine(object):
         return len(self.client.ls(quiet=True, filters='name={}'.format(self.name)).formatted) != 0
 
     def runningish(self):
-        # TODO: Further investigation might be needed here.
-        return self.status() in [Status.running, Status.starting, Status.stopping, Status.paused]
+        return self.status() in [Status.running, Status.starting]
 
     def stoppedish(self):
-        return self.status() in [Status.stopped, Status.paused, Status.saved]
+        return self.status() in [Status.stopped, Status.stopping, Status.paused, Status.saved]
 
     def errorish(self):
         return self.status() in [Status.error, Status.timeout]
