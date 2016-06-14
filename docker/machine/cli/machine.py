@@ -42,6 +42,11 @@ class Machine(object):
             self.inspection = None
 
     def __getattr__(self, name):
+        if name in [k for k, v in Status.__members__.items()]:
+            def method():
+                return Status(name) == self.status()
+            return method
+
         if hasattr(self.client, name):
             def wrapper(*args, **kw):
                 fun_name = getattr(self.client, name)
@@ -61,8 +66,6 @@ class Machine(object):
 
                 return self if client_output.formatted is None else client_output.formatted
             return wrapper
-        elif name in [k for k, v in Status.__members__.items()]:
-            return Status(name) == self.status()
         else:
             try:
                 return getattr(self.inspection, name)
@@ -74,6 +77,10 @@ class Machine(object):
 
     def exists(self):
         return len(self.client.ls(quiet=True, filters='name={}'.format(self.name)).formatted) != 0
+
+    def runningish(self):
+        # TODO: Further investigation might be needed here.
+        return self.status() in [Status.running, Status.starting, Status.stopping, Status.paused]
 
     def _after_create(self):
         self._initialize()
