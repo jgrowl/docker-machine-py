@@ -1,5 +1,7 @@
-import docker.machine
 import inspect
+
+import docker.machine
+from docker.machine.cli.client import Status
 
 
 class Machine(object):
@@ -59,11 +61,13 @@ class Machine(object):
 
                 return self if client_output.formatted is None else client_output.formatted
             return wrapper
-
-        try:
-            return getattr(self.inspection, name)
-        except AttributeError:
-            raise AttributeError("Machine object has no attribute '{}'".format(name))
+        elif name in [k for k, v in Status.__members__.items()]:
+            return Status(name) == self.status()
+        else:
+            try:
+                return getattr(self.inspection, name)
+            except AttributeError:
+                raise AttributeError("Machine object has no attribute '{}'".format(name))
 
     def __eq__(self, other):
         return self.name == other.name

@@ -41,6 +41,27 @@ class BaseTestCases:
         def test_status(self):
             self.assertEqual(self.machine.status(), Status.running)
 
+        def test_running(self):
+            self.assertTrue(self.machine.running)
+
+        def test_paused(self):
+            self.assertFalse(self.machine.paused)
+
+        def test_stopped(self):
+            self.assertFalse(self.machine.stopped)
+
+        def test_stopping(self):
+            self.assertFalse(self.machine.stopping)
+
+        def test_starting(self):
+            self.assertFalse(self.machine.starting)
+
+        def error(self):
+            self.assertFalse(self.machine.error)
+
+        def timeout(self):
+            self.assertFalse(self.machine.timeout)
+
         def tearDown(self):
             try:
                 self.machine.rm(force=True)

@@ -10,14 +10,14 @@ LOCALHOST = '127.0.0.1'
 
 
 class Status(Enum):
-    running = "Running"
-    paused = "Paused"
-    saved = "Saved"
-    stopped = "Stopped"
-    stopping = "Stopping"
-    starting = "Starting"
-    error = "Error"
-    timeout = "Timeout"
+    running = "running"
+    paused = "paused"
+    saved = "saved"
+    stopped = "stopped"
+    stopping = "stopping"
+    starting = "starting"
+    error = "error"
+    timeout = "timeout"
 
 
 class Filter(object):
@@ -285,7 +285,7 @@ class Client(object):
 
     def status(self, machine_name):
         raw = self.cmd(['status'], machine_name)
-        return ClientOutput(raw, Status(raw.rstrip('\n')))
+        return ClientOutput(raw, Status(raw.rstrip('\n').lower()))
 
     def upgrade(self, *machine_names):
         raw = self.cmd(['upgrade'], *machine_names)
