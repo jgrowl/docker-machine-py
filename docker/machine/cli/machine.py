@@ -82,6 +82,9 @@ class Machine(object):
         # TODO: Further investigation might be needed here.
         return self.status() in [Status.running, Status.starting, Status.stopping, Status.paused]
 
+    def errorish(self):
+        return self.status() in [Status.error, Status.timeout]
+
     def _after_create(self):
         self._initialize()
 
