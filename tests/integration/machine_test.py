@@ -65,6 +65,9 @@ class BaseTestCases:
         def test_runningish(self):
             self.assertTrue(self.machine.runningish())
 
+        def test_stoppedish(self):
+            self.assertFalse(self.machine.stoppedish())
+
         def test_errorish(self):
             self.assertFalse(self.machine.errorish())
 
