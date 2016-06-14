@@ -179,9 +179,10 @@ class Client(object):
 
         return ClientOutput(raw, ret)
 
-    def inspect(self, machine_name, format=None, snake_case=False, named_tuple=False):
+    def inspect(self, machine_name, format=None, snake_case=True, named_tuple=False):
         cmd = ['inspect', machine_name]
         if format is not None:
+            # TODO: Fix format here
             cmd.append(format)
 
         raw = self.cmd(cmd)

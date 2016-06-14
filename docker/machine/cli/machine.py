@@ -91,4 +91,4 @@ class Machine(object):
         self._initialize()
 
     def _initialize(self):
-        self.inspection = self.client.inspect(self.name, snake_case=True, named_tuple=True).formatted
+        self.inspection = self.client.inspect(self.name, named_tuple=True).formatted
