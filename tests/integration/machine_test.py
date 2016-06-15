@@ -2,7 +2,7 @@ import os
 import unittest
 
 from docker.machine.cli.machine import Machine
-from docker.machine.errors import DockerMachineException, MissingRequiredArgument
+from docker.machine.errors import DockerMachineException
 from docker.machine.cli.client import Status
 
 digitalocean_access_token = os.environ.get('DOCKERMACHINEPY_DIGITALOCEAN_ACCESS_TOKEN')
@@ -166,7 +166,7 @@ class DigitaloceanMachineTest(BaseTestCases.MachineDriverTest if digitalocean_ac
         super(DigitaloceanMachineTest, self).__init__('digitaloceanMachineTest', driver, params, *args, **kwargs)
 
     def test_missing_required_parameter(self):
-        with self.assertRaises(MissingRequiredArgument):
+        with self.assertRaises(ValueError):
             Machine('missingRequiredParameterTestMachine').create(self.driver)
 
     def test_invalid_access_token(self):

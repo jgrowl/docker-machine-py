@@ -1,5 +1,4 @@
 import os
-from .. import errors
 
 DRIVER_DESCRIPTIONS = {
     'none': {'non_driver_keys': ['url']},
@@ -90,7 +89,7 @@ class DriverConfig(object):
     def _require(self, tuples):
         for t in tuples:
             if self._lookup_arg(t[1], t[2]) is None:
-                raise errors.MissingRequiredArgument(t[0])
+                raise ValueError('Missing required argument: {} for driver {}'.format(t[0], self.driver))
 
 
 def list_supported_drivers():
