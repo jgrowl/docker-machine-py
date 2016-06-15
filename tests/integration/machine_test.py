@@ -2,7 +2,7 @@ import os
 import unittest
 
 from docker.machine.cli.machine import Machine
-from docker.machine.errors import DockerMachineException
+from docker.machine.errors import CLIError
 from docker.machine.cli.client import Status
 
 digitalocean_access_token = os.environ.get('DOCKERMACHINEPY_DIGITALOCEAN_ACCESS_TOKEN')
@@ -74,7 +74,7 @@ class BaseTestCases:
         def tearDown(self):
             try:
                 self.machine.rm(force=True)
-            except DockerMachineException:
+            except CLIError:
                 pass
 
     class MachineDriverTest(MachineDriverBaseTest):
@@ -102,34 +102,34 @@ class NoDriverMachineTest(BaseTestCases.MachineDriverBaseTest):
         self.assertEqual(self.machine.ip(), '127.0.0.1')
 
     def test_ssh(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.ssh()
 
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.ssh('ls -lah')
 
     def test_config(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.config()
 
     def test_restart(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.restart()
 
     def test_env(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.env()
 
     def test_stop(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.stop()
 
     def test_start(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.start()
 
     def test_kill(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             self.machine.kill()
 
         # # def inspect(self, format=None, snake_case=False, named_tuple=False):
@@ -142,19 +142,19 @@ class NoDriverMachineTest(BaseTestCases.MachineDriverBaseTest):
 
     # @unittest.skip('Slow test')
     # def test_regenerate_certs(self):
-    #     with self.assertRaises(DockerMachineException):
+    #     with self.assertRaises(CLIError):
     #         self.machine.regenerate_certs()
     #
     # @unittest.skip('Slow test')
     # def test_upgrade(self):
-    #     with self.assertRaises(DockerMachineException):
+    #     with self.assertRaises(CLIError):
     #         self.machine.upgrade()
 
     def tearDown(self):
         try:
             self.assertEqual(self.machine.rm(force=True), self.machine)
             self.assertFalse(self.machine.exists())
-        except DockerMachineException:
+        except CLIError:
             pass
 
 
@@ -170,6 +170,6 @@ class DigitaloceanMachineTest(BaseTestCases.MachineDriverTest if digitalocean_ac
             Machine('missingRequiredParameterTestMachine').create(self.driver)
 
     def test_invalid_access_token(self):
-        with self.assertRaises(DockerMachineException):
+        with self.assertRaises(CLIError):
             Machine('invalidAccessTokenTestMachine').create(self.driver, access_token='INVALID_ACCESS_TOKEN')
 

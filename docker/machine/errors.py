@@ -1,2 +1,2 @@
-class DockerMachineException(Exception):
+class CLIError(RuntimeError):
     pass

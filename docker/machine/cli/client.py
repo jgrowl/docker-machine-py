@@ -115,12 +115,12 @@ class Client(object):
             return out
 
         error = error.strip()
-        raise errors.DockerMachineException(error)
+        raise errors.CLIError(error)
 
     def active(self):
         try:
             raw = self.cmd(['active'])
-        except errors.DockerMachineException, e:
+        except errors.CLIError, e:
             msg = e.message
             if msg == 'No active host found':
                 return ClientOutput(msg, list())
