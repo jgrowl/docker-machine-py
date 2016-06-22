@@ -5,8 +5,7 @@ from .tupperware import tupperware
 from .. import errors
 from .driver_config import DriverConfig
 from .utils import convert_keys_from_camel_to_snake
-
-LOCALHOST = '127.0.0.1'
+from ..constants import LOCALHOST
 
 
 class Status(Enum):
@@ -55,11 +54,6 @@ class Filter(object):
 
     def out(self):
         return ['--filter', '{}={}'.format(self.key, self.value)]
-        # driver (driver name)
-        # swarm (swarm master's name)
-        # state (Running|Paused|Saved|Stopped|Stopping|Starting|Error)
-        # name (Machine name returned by driver, supports golang style regular expressions)
-        # label (Machine created with --engine-label option, can be filtered with label=<key>[=<value>])
 
 
 class ClientOutput:
@@ -101,7 +95,7 @@ class Client(object):
         if self.github_api_token:
             cmd.extend(['--github-api-token', self.github_api_token])
         if self.native_ssh:
-            cmd.extend(['--native-ssh', self.native_ssh])
+            cmd.extend(['--native-ssh'])
         if self.bugsnag_api_token:
             cmd.extend(['--bugsnag_api_token', self.bugsnag_api_token])
 
@@ -127,9 +121,7 @@ class Client(object):
             else:
                 raise e
 
-        # TODO: format active
-
-        return ClientOutput(raw)
+        return ClientOutput(raw, raw.strip('\n'))
 
     def config(self, machine_name, swarm=False):
         cmd = ['config']
