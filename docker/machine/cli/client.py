@@ -192,7 +192,7 @@ class Client(object):
         cmd.extend(machine_names)
         raw = self.cmd(cmd)
         formatted = raw.strip('\n')
-        return ClientOutput(raw, formatted if formatted else '127.0.0.1')
+        return ClientOutput(raw, formatted if formatted else LOCALHOST)
 
     def kill(self, *machine_names):
         cmd = ['kill']

@@ -4,6 +4,7 @@ import unittest
 from docker.machine.cli.machine import Machine
 from docker.machine.errors import CLIError
 from docker.machine.cli.client import Status
+from docker.machine.constants import LOCALHOST
 
 digitalocean_access_token = os.environ.get('DOCKERMACHINEPY_DIGITALOCEAN_ACCESS_TOKEN')
 
@@ -99,7 +100,7 @@ class NoDriverMachineTest(BaseTestCases.MachineDriverBaseTest):
         super(NoDriverMachineTest, self).__init__('noDriverMachineTest', None, {}, *args, **kwargs)
 
     def test_ip(self):
-        self.assertEqual(self.machine.ip(), '127.0.0.1')
+        self.assertEqual(self.machine.ip(), LOCALHOST)
 
     def test_ssh(self):
         with self.assertRaises(CLIError):
