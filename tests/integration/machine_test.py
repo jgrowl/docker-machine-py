@@ -32,8 +32,10 @@ class BaseTestCases:
             self.assertIsNotNone(version_info.version_number)
             self.assertIsNotNone(version_info.version_hash)
 
-        def test_active_docker_machines(self):
-            self.assertEqual(0, len(Machine.active_docker_machines()))
+        def test_active_docker_machine(self):
+            self.assertIsNone(Machine.active_docker_machine())
+
+        def test_all_docker_machines(self):
             self.assertEqual(self.machine, Machine.all_docker_machines()[0])
 
         def test_url(self):

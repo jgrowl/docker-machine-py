@@ -117,7 +117,7 @@ class Client(object):
         except errors.CLIError, e:
             msg = e.message
             if msg == 'No active host found':
-                return ClientOutput(msg, list())
+                return ClientOutput(msg, '')
             else:
                 raise e
 

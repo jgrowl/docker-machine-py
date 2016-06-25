@@ -20,13 +20,14 @@ class Machine(object):
         return map(cls, machine_names) if machine_names is not None else list()
 
     @classmethod
-    def active_docker_machine_names(cls):
-        return cls.default_client().active().val()
+    def active_docker_machine_name(cls):
+        active = cls.default_client().active().val()
+        return active if active else None
 
     @classmethod
-    def active_docker_machines(cls):
-        machine_names = cls.default_client().active().val()
-        return map(cls, machine_names) if machine_names is not None else list()
+    def active_docker_machine(cls):
+        machine_name = cls.active_docker_machine_name()
+        return Machine(machine_name) if machine_name else None
 
     @classmethod
     def all_docker_machine_names(cls):
@@ -77,6 +78,9 @@ class Machine(object):
 
     def exists(self):
         return len(self.client.ls(quiet=True, filters='name={}'.format(self.name)).formatted) != 0
+
+    def active(self):
+        self.client.active() == self.name
 
     def runningish(self):
         return self.status() in [Status.running, Status.starting]
